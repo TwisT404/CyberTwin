@@ -1,12 +1,65 @@
 <template>
-    <!-- <p v-if="loading" class="loading">
-        Chargement...
-    </p> -->
     <h1>Entreprises</h1>
-
+    <a href="" id="addComp">Ajouter une entreprise</a>
+    <section>
+            <div class="block">
+                <h2>Nom Entreprise</h2>
+                <p>Secteur d'activité</p>
+                <p>Nombre d'employé : 23</p>
+                <p>Nombre de serveurs : 23</p>
+                <p>Nombre de postes clients : 23</p>
+                <p>Services exposés sur Internet</p>
+                <div class="link">
+                    <a>Modifier</a>
+                    <a>Supprimer</a>
+                </div>
+                
+            </div>
+            <div class="block">
+                <h2>Nom Entreprise</h2>
+                <p>Secteur d'activité</p>
+                <p>Nombre d'employé : 23</p>
+                <p>Nombre de serveurs : 23</p>
+                <p>Nombre de postes clients : 23</p>
+                <p>Services exposés sur Internet</p>
+                <div class="link">
+                    <a>Modifier</a>
+                    <a>Supprimer</a>
+                </div>
+            </div>
+            <div class="block">
+                <h2>Nom Entreprise</h2>
+                <p>Secteur d'activité</p>
+                <p>Nombre d'employé : 23</p>
+                <p>Nombre de serveurs : 23</p>
+                <p>Nombre de postes clients : 23</p>
+                <p>Services exposés sur Internet</p>
+                <div class="link">
+                    <a>Modifier</a>
+                    <a>Supprimer</a>
+                </div>
+            </div>
+            <div class="block">
+                <h2>Nom Entreprise</h2>
+                <p>Secteur d'activité</p>
+                <p>Nombre d'employé : 23</p>
+                <p>Nombre de serveurs : 23</p>
+                <p>Nombre de postes clients : 23</p>
+                <p>Services exposés sur Internet</p>
+                <div class="link">
+                    <a>Modifier</a>
+                    <a>Supprimer</a>
+                </div>
+            </div>
+    </section>
+    
 </template>
 
-<script>
+<style scoped>
+@import url('./../../assets/css/Entreprise.css');
+</style>
+
+<!-- <script>
     const { createApp } = Vue
     createApp({
         data() {
@@ -35,4 +88,4 @@
     
 
     
-</script>
+</script> -->
