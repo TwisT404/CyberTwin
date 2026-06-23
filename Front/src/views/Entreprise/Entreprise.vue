@@ -1,6 +1,6 @@
 <template>
     <h1>Entreprises</h1>
-    <a href="" id="addComp">Ajouter une entreprise</a>
+    <a href="/entreprises/add" id="addComp">Ajouter une entreprise</a>
     <section>
             <div class="block">
                 <h2>Nom Entreprise</h2>
@@ -56,7 +56,7 @@
 </template>
 
 <style scoped>
-@import url('./../../assets/css/Entreprise.css');
+@import url('./../../assets/css/Entreprise/Entreprise.css');
 </style>
 
 <!-- <script>

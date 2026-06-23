@@ -4,12 +4,14 @@ const Dashboard = () => import('../views/Dashboard.vue')
 const Entreprises = () => import('../views/Entreprise/Entreprise.vue')
 const Actifs = () => import('../views/Actif/Actif.vue')
 const Vulnerabilite = () => import('../views/Vulnerabilite/Vulnerabilite.vue')
+const AjoutEntreprise = () => import('../views/Entreprise/FormAjoutEntreprise.vue')
 
 
 
 const routes = [
     { path: '/', component: Dashboard },
     { path: '/entreprises', component: Entreprises },
+    { path: '/entreprises/add', component: AjoutEntreprise },
     {
         path: '/actifs',
         component: Actifs,
