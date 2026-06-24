@@ -1,9 +1,9 @@
-const Vunerability = require('../models/vulnerabilities.js');
+const Vunerabilites = require('../models/vulnerabilites.js');
 const db = require('../config/database.js');
 
-// GET /api/vulnerabilities
-const getAllVulnerabilities = (req, res) => {
-  db.query('SELECT * FROM vulnerabilities', (err, results) => {
+// GET /api/vulnerabilites
+const getAllVulnerabilites = (req, res) => {
+  db.query('SELECT * FROM vulnerabilites', (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -11,16 +11,16 @@ const getAllVulnerabilities = (req, res) => {
   });
 };
 
-// POST /api/vulnerabilities
-const createVulnerabilities = (req, res) => {
+// POST /api/vulnerabilites
+const createVulnerabilites = (req, res) => {
   const { name, description, severity } = req.body;
   const newVulnerability = new Vunerability(
-    vulnerabilities.length + 1,
+    vulnerabilites.length + 1,
     name,
     description,
     severity
   );
-  db.query('INSERT INTO vulnerabilities SET ?', newVulnerability, (err, result) => {
+  db.query('INSERT INTO vulnerabilites SET ?', newVulnerability, (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -28,11 +28,11 @@ const createVulnerabilities = (req, res) => {
   });
 };
 
-// PUT /api/vulnerabilities/:id
-const updateVulnerabilities = (req, res) => {
+// PUT /api/vulnerabilites/:id
+const updateVulnerabilites = (req, res) => {
   const id = parseInt(req.params.id);
   const { name, description, severity } = req.body;
-  db.query('UPDATE vulnerabilities SET ? WHERE id = ?', [req.body, id], (err, result) => {
+  db.query('UPDATE vulnerabilites SET ? WHERE id = ?', [req.body, id], (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -40,10 +40,10 @@ const updateVulnerabilities = (req, res) => {
   });
 };
 
-// DELETE /api/vulnerabilities/:id
-const deleteVulnerabilities = (req, res) => {
+// DELETE /api/vulnerabilites/:id
+const deleteVulnerabilites = (req, res) => {
   const id = parseInt(req.params.id);
-  db.query('DELETE FROM vulnerabilities WHERE id = ?', [id], (err, result) => {
+  db.query('DELETE FROM vulnerabilites WHERE id = ?', [id], (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -52,8 +52,8 @@ const deleteVulnerabilities = (req, res) => {
 };
 
 module.exports = {
-  getAllVulnerabilities,
-  createVulnerabilities,
-  updateVulnerabilities,
-  deleteVulnerabilities
+  getAllVulnerabilites,
+  createVulnerabilites,
+  updateVulnerabilites,
+  deleteVulnerabilites
 };
