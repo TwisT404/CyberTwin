@@ -16,7 +16,7 @@
                 <p>Services exposés sur Internet : {{ company.services_exposes }}</p>
                 <div class="link">
                     <a>Modifier</a>
-                    <a>Supprimer</a>
+                    <a @click="supprimerEntreprise(company.entreprise_id)">Supprimer</a>
                 </div>
                 
             </div>
@@ -28,38 +28,61 @@
 <style scoped>
 @import url('./../../assets/css/Entreprise/Entreprise.css');
 </style>
-
 <script setup>
-    import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue'
 
-    const entreprise = ref([])
-    const loading = ref(false)
-    const error = ref('')
+const entreprise = ref([])
+const loading = ref(false)
+const error = ref('')
 
-    async function loadCompanies() {
-    loading.value = true
+const loadCompanies = async () => {
+  loading.value = true
 
-    try {
-        const response = await fetch(
-        'http://localhost:3006/api/companies'
-        )
+  try {
+    const response = await fetch('http://localhost:3006/api/companies')
 
-        if (!response.ok) {
-        throw new Error('Erreur lors du chargement des entreprises')
-        }
-
-        entreprise.value = await response.json()
-
-
-    } catch (err) {
-        error.value = err.message
-
-    } finally {
-        loading.value = false
-    }
+    if (!response.ok) {
+      throw new Error('Erreur lors du chargement des entreprises')
     }
 
-    onMounted(() => {
-    loadCompanies()
-    })
+    entreprise.value = await response.json()
+  } catch (err) {
+    error.value = err.message
+  } finally {
+    loading.value = false
+  }
+}
+
+const supprimerEntreprise = async (id) => {
+     loading.value = true
+  if (!confirm("Voulez-vous vraiment supprimer cette entreprise ?")) {
+    return
+  }
+
+  try {
+    const response = await fetch(
+      `http://localhost:3006/api/companies/${id}`,
+      {
+        method: "DELETE",
+      }
+    )
+
+    if (!response.ok) {
+      throw new Error("Erreur lors de la suppression")
+    }
+
+    entreprise.value = entreprise.value.filter(
+      company => company.id !== id
+    )
+
+  } catch (err) {
+    console.error(err)
+  }finally{
+     loading.value = false
+  }
+}
+
+onMounted(() => {
+  loadCompanies()
+})
 </script>
