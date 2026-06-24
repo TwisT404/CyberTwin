@@ -2,55 +2,25 @@
     <h1>Entreprises</h1>
     <a href="/entreprises/add" id="addComp">Ajouter une entreprise</a>
     <section>
-            <div class="block">
-                <h2>Nom Entreprise</h2>
-                <p>Secteur d'activité</p>
-                <p>Nombre d'employé : 23</p>
-                <p>Nombre de serveurs : 23</p>
-                <p>Nombre de postes clients : 23</p>
-                <p>Services exposés sur Internet</p>
+        <div v-if="loading">Chargement...</div>
+
+        <div v-else-if="error">
+            {{ error }}
+        </div>
+            <div class="block" v-else v-for="company in entreprise" :key="company.id">
+                <h2>{{ company.entreprise_nom }}</h2>
+                <p>{{ company.secteur }}</p>
+                <p>Nombre d'employé : {{ company.employes }}</p>
+                <p>Nombre de serveurs : {{ company.serveurs }}</p>
+                <p>Nombre de postes clients : {{ company.postes_clients }}</p>
+                <p>Services exposés sur Internet : {{ company.services_exposes }}</p>
                 <div class="link">
                     <a>Modifier</a>
                     <a>Supprimer</a>
                 </div>
                 
             </div>
-            <div class="block">
-                <h2>Nom Entreprise</h2>
-                <p>Secteur d'activité</p>
-                <p>Nombre d'employé : 23</p>
-                <p>Nombre de serveurs : 23</p>
-                <p>Nombre de postes clients : 23</p>
-                <p>Services exposés sur Internet</p>
-                <div class="link">
-                    <a>Modifier</a>
-                    <a>Supprimer</a>
-                </div>
-            </div>
-            <div class="block">
-                <h2>Nom Entreprise</h2>
-                <p>Secteur d'activité</p>
-                <p>Nombre d'employé : 23</p>
-                <p>Nombre de serveurs : 23</p>
-                <p>Nombre de postes clients : 23</p>
-                <p>Services exposés sur Internet</p>
-                <div class="link">
-                    <a>Modifier</a>
-                    <a>Supprimer</a>
-                </div>
-            </div>
-            <div class="block">
-                <h2>Nom Entreprise</h2>
-                <p>Secteur d'activité</p>
-                <p>Nombre d'employé : 23</p>
-                <p>Nombre de serveurs : 23</p>
-                <p>Nombre de postes clients : 23</p>
-                <p>Services exposés sur Internet</p>
-                <div class="link">
-                    <a>Modifier</a>
-                    <a>Supprimer</a>
-                </div>
-            </div>
+
     </section>
     
 </template>
@@ -59,33 +29,37 @@
 @import url('./../../assets/css/Entreprise/Entreprise.css');
 </style>
 
-<!-- <script>
-    const { createApp } = Vue
-    createApp({
-        data() {
-            return {
-                // products: [],
-                // newTitle: '',
-                // newPrice: '',
-                // loading: false,
-                // error: ""
-            }
-        },
-        methods: {
-            
-            async loadProducts() {
+<script setup>
+    import { ref, onMounted } from 'vue'
 
-                // const response = await fetch('https://fakestoreapi.com/products')
-                // const data = await response.json()
-                // this.products = data
-            },
+    const entreprise = ref([])
+    const loading = ref(false)
+    const error = ref('')
 
-        },
-        mounted() {
-            this.loadProducts()
+    async function loadCompanies() {
+    loading.value = true
+
+    try {
+        const response = await fetch(
+        'http://localhost:3006/api/companies'
+        )
+
+        if (!response.ok) {
+        throw new Error('Erreur lors du chargement des entreprises')
         }
-    }).mount('#app');
-    
 
-    
-</script> -->
+        entreprise.value = await response.json()
+
+
+    } catch (err) {
+        error.value = err.message
+
+    } finally {
+        loading.value = false
+    }
+    }
+
+    onMounted(() => {
+    loadCompanies()
+    })
+</script>

@@ -3,7 +3,7 @@ const db = require('../config/database.js');
 
 // GET /api/companies
 const getAllCompanies = (req, res) => {
-  db.query('SELECT * FROM companies', (err, results) => {
+  db.query('SELECT * FROM entreprises', (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
