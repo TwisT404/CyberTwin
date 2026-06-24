@@ -10,6 +10,7 @@ app.use(express.json());
 app.use('/api/companies', require('./routes/companiesRoutes'));
 app.use('/api/assets', require('./routes/assetsRoutes'));
 app.use('/api/vulnerabilities', require('./routes/vulnerabilitiesRoutes'));
+app.use('/api/risk', require('./routes/riskRoutes'));
 
 
 app.listen(process.env.PORT, () => {
