@@ -1,22 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const {
-  getAllAssets,
-  createAsset,
-  updateAsset,
-  deleteAsset
-} = require('../controllers/assetsController');
+  getAllActifs,
+  createActif,
+  updateActif,
+  deleteActif
+} = require('../controllers/actifsController');
 
-// GET /api/assets
-router.get('/', getAllAssets);
+// GET /api/actifs
+router.get('/', getAllActifs);
 
-// POST /api/assets
-router.post('/', createAsset);
+// POST /api/actifs
+router.post('/', createActif);
 
-// PUT /api/assets/:id
-router.put('/:id', updateAsset);
+// PUT /api/actifs/:id
+router.put('/:id', updateActif);
 
-// DELETE /api/assets/:id
-router.delete('/:id', deleteAsset);
+// DELETE /api/actifs/:id
+router.delete('/:id', deleteActif);
 
 module.exports = router;

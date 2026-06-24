@@ -1,22 +1,22 @@
 const express = require('express');
 const router = express.Router();
 const {
-  getAllVulnerabilities,
-  createVulnerabilities,
-  updateVulnerabilities,
-  deleteVulnerabilities
-} = require('../controllers/vulnerabilitiesController');
+  getAllVulnerabilites,
+  createVulnerabilites,
+  updateVulnerabilites,
+  deleteVulnerabilites
+} = require('../controllers/vulnerabilitesController');
 
 // GET /api/vulnerabilities
-router.get('/', getAllVulnerabilities);
+router.get('/', getAllVulnerabilites);
 
 // POST /api/vulnerabilities
-router.post('/', createVulnerabilities);
+router.post('/', createVulnerabilites);
 
 // PUT /api/vulnerabilities/:id
-router.put('/:id', updateVulnerabilities);
+router.put('/:id', updateVulnerabilites);
 
 // DELETE /api/vulnerabilities/:id
-router.delete('/:id', deleteVulnerabilities);
+router.delete('/:id', deleteVulnerabilites);
 
 module.exports = router;

@@ -1,9 +1,9 @@
-const Asset = require('../models/assets.js');
+const Actif = require('../models/actifs.js');
 const db = require('../config/database.js');
 
-// GET /api/assets
-const getAllAssets = (req, res) => {
-  db.query('SELECT * FROM assets', (err, results) => {
+// GET /api/actifs
+const getAllActifs = (req, res) => {
+  db.query('SELECT * FROM actifs', (err, results) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -11,10 +11,10 @@ const getAllAssets = (req, res) => {
   });
 };
 
-// POST /api/assets
-const createAsset = (req, res) => {
+// POST /api/actifs
+const createActif = (req, res) => {
   const { name, type, criticality, vulnerabilities, isExposedToInternet } = req.body;
-  db.query('INSERT INTO assets SET ?', { name, type, criticality, vulnerabilities, isExposedToInternet }, (err, result) => {
+  db.query('INSERT INTO actifs SET ?', { name, type, criticality, vulnerabilities, isExposedToInternet }, (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -22,11 +22,11 @@ const createAsset = (req, res) => {
   });
 };
 
-// PUT /api/assets/:id
-const updateAsset = (req, res) => {
+// PUT /api/actifs/:id
+const updateActif = (req, res) => {
   const id = parseInt(req.params.id);
   const { name, type, criticality, vulnerabilities, isExposedToInternet } = req.body;
-  db.query('UPDATE assets SET ? WHERE id = ?', [req.body, id], (err, result) => {
+  db.query('UPDATE actifs SET ? WHERE id = ?', [req.body, id], (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -34,10 +34,10 @@ const updateAsset = (req, res) => {
   });
 };
 
-// DELETE /api/assets/:id
-const deleteAsset = (req, res) => {
+// DELETE /api/actifs/:id
+const deleteActif = (req, res) => {
   const id = parseInt(req.params.id);
-  db.query('DELETE FROM assets WHERE id = ?', [id], (err, result) => {
+  db.query('DELETE FROM actifs WHERE id = ?', [id], (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -46,8 +46,8 @@ const deleteAsset = (req, res) => {
 };
 
 module.exports = {
-  getAllAssets,
-  createAsset,
-  updateAsset,
-  deleteAsset
+  getAllActifs,
+  createActif,
+  updateActif,
+  deleteActif
 };
