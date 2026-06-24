@@ -1,4 +1,4 @@
-const Company = require('../models/assets.js');
+const Company = require('../models/companies.js');
 const db = require('../config/database.js');
 
 // GET /api/companies
@@ -13,21 +13,18 @@ const getAllCompanies = (req, res) => {
 
 // POST /api/companies
 const createCompany = (req, res) => {
-  const { name, sector, employees, servers, client_stations, exposed_services } = req.body;
-  const newCompany = new Company(
-    companies.length + 1,
-    name,
-    sector,
-    employees,
-    servers,
-    client_stations,
-    exposed_services
-  );
-  db.query('INSERT INTO companies SET ?', newCompany, (err, result) => {
+  const { entreprise_nom, secteur, employes, serveurs, postes_clients, services_exposes } = req.body;
+
+  // Fix column name typo: services_exposes in DB
+  const sql = 'INSERT INTO entreprises (entreprise_nom, secteur, employes, serveurs, postes_clients, services_exposes) VALUES (?,?,?,?,?,?)';
+  const params = [entreprise_nom, secteur, employes, serveurs, postes_clients, services_exposes];
+
+  db.query(sql, params, (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.status(201).json({ id: result.insertId, ...newCompany });
+    // return created resource id
+    res.status(201).json({ id: result.insertId });
   });
 };
 
@@ -35,7 +32,7 @@ const createCompany = (req, res) => {
 const updateCompany = (req, res) => {
   const id = parseInt(req.params.id);
   const { name, sector, employees, servers, client_stations, exposed_services } = req.body;
-  db.query('UPDATE companies SET ? WHERE id = ?', [newCompany, id], (err, result) => {
+  db.query('UPDATE entreprises SET ? WHERE id = ?', [newCompany, id], (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -46,7 +43,7 @@ const updateCompany = (req, res) => {
 // DELETE /api/companies/:id
 const deleteCompany = (req, res) => {
   const id = parseInt(req.params.id);
-  db.query('DELETE FROM companies WHERE id = ?', [id], (err, result) => {
+  db.query('DELETE FROM entreprises WHERE id = ?', [id], (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
