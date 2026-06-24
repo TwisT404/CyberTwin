@@ -13,18 +13,14 @@ const getAllVulnerabilites = (req, res) => {
 
 // POST /api/vulnerabilites
 const createVulnerabilites = (req, res) => {
-  const { name, description, severity } = req.body;
-  const newVulnerability = new Vunerability(
-    vulnerabilites.length + 1,
-    name,
-    description,
-    severity
-  );
-  db.query('INSERT INTO vulnerabilites SET ?', newVulnerability, (err, result) => {
+  const { vulnerabilite_nom, description, gravite } = req.body;
+  const sql = 'INSERT INTO vulnerabilites (vulnerabilite_nom, description, gravite) VALUES (?,?,?)';
+  const params = [vulnerabilite_nom, description, gravite];
+  db.query(sql, params, (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.status(201).json({ id: result.insertId, ...newVulnerability });
+    res.status(201).json({ id: result.insertId});
   });
 };
 
