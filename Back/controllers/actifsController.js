@@ -39,7 +39,7 @@ const updateActif = (req, res) => {
 // DELETE /api/actifs/:id
 const deleteActif = (req, res) => {
   const id = parseInt(req.params.id);
-  db.query('DELETE FROM actifs WHERE id = ?', [id], (err, result) => {
+  db.query('DELETE FROM actifs WHERE actif_id = ?', [id], (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }

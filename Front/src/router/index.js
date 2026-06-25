@@ -5,6 +5,7 @@ const Entreprises = () => import('../views/Entreprise/Entreprise.vue')
 const Actifs = () => import('../views/Actif/Actif.vue')
 const Vulnerabilite = () => import('../views/Vulnerabilite/Vulnerabilite.vue')
 const AjoutEntreprise = () => import('../views/Entreprise/FormAjoutEntreprise.vue')
+const AjoutActif = () => import('../views/Actif/FormAjoutActif.vue')
 
 
 
@@ -15,6 +16,10 @@ const routes = [
     {
         path: '/actifs',
         component: Actifs,
+    },
+        {
+        path: '/actifs/add',
+        component: AjoutActif,
     },
     {
         path: '/vulnerabilites',
