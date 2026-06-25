@@ -1,0 +1,97 @@
+h1{
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+form{
+    border: 2px solid rgb(121, 213, 231);
+    border-radius: 15px;
+    width: 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    padding-bottom: 15px;
+    padding-top: 15px;
+    gap: 20px;
+}
+
+form>div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+form>div>button, form>div>a{
+    width: 75px;
+    height: 45px;
+    border-radius: 15px;
+    color: black;
+    font-size: medium;
+}
+form>div>button{
+    background-color: rgba(51, 138, 51, 0.741);
+    box-shadow: none;
+    border: none;
+}
+
+form>div>a{
+    background-color: rgba(255, 0, 0, 0.667);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+input{
+    width: 250px;
+    height: 25px;
+    border-radius: 15px;
+    margin-top: 5px;
+    padding-left: 10px;
+}
+
+/* 1. On annule le style global sur les radios */
+input[type="radio"] {
+  width: auto;
+  height: auto;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+}
+
+/* 2. Conteneur des options de gravité */
+.radio-group {
+  display: flex;
+  flex-direction: column;      /* une option par ligne, comme sur ta capture */
+  align-items: flex-start;     /* aligne tout bien à gauche dans le bloc */
+  gap: 4px;                    /* petit espace entre les lignes */
+  margin-top: 6px;
+}
+
+/* 3. Ligne radio + texte bien alignée et serrée */
+.radio-item {
+  display: inline-flex;
+  align-items: center;         /* aligne verticalement le bouton et le texte */
+  gap: 4px;                    /* colle un peu le texte au bouton */
+  font-size: 14px;
+  cursor: pointer;
+  line-height: 1.1;
+}
+
+/* 4. Taille et alignement du bouton radio lui-même */
+.radio-item input[type="radio"] {
+  transform: scale(1.1);       /* léger agrandissement, pas énorme */
+  margin: 0;
+}
