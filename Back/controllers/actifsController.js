@@ -13,9 +13,9 @@ const getAllActifs = (req, res) => {
 
 // POST /api/actifs
 const createActif = (req, res) => {
-  const { actif_nom, type, criticite, vulnerabilites, est_expose_internet} = req.body;
-  const sql = 'INSERT INTO actifs (actif_nom, type, criticite, vulnerabilites, est_expose_internet) VALUES (?,?,?,?,?)';
-  const params = [actif_nom, type, criticite, vulnerabilites, est_expose_internet];
+  const { actif_nom, type, criticite, est_expose_internet, entreprise_id} = req.body;
+  const sql = 'INSERT INTO actifs (actif_nom, type, criticite, est_expose_internet, entreprise_id) VALUES (?,?,?,?,?)';
+  const params = [actif_nom, type, criticite, est_expose_internet, entreprise_id];
   db.query(sql, params, (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
