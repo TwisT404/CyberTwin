@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   getAllCompanies,
+  getCompanyById,
   createCompany,
   updateCompany,
   deleteCompany
@@ -9,6 +10,9 @@ const {
 
 // GET /api/companies
 router.get('/', getAllCompanies);
+
+// GET /api/companies/:id
+router.get('/:id', getCompanyById);
 
 // POST /api/companies
 router.post('/', createCompany);

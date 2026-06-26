@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const {
   getAllActifs,
+  getActifById,
+  getActifsByEntreprise,
   createActif,
   updateActif,
   deleteActif
@@ -9,6 +11,12 @@ const {
 
 // GET /api/actifs
 router.get('/', getAllActifs);
+
+// GET /api/actifs/entreprise/:entreprise_id (déclaré avant /:id pour éviter le conflit de route)
+router.get('/entreprise/:entreprise_id', getActifsByEntreprise);
+
+// GET /api/actifs/:id
+router.get('/:id', getActifById);
 
 // POST /api/actifs
 router.post('/', createActif);
