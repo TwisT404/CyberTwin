@@ -19,10 +19,10 @@
         </div>
 
         <div class="form-group">
-        <label for="secteur">Secteur</label>
+        <label for="type">Type d'actif</label>
 
         <select
-            id="secteur"
+            id="type"
             v-model="actifs.type"
             required
         >
@@ -50,19 +50,22 @@
             <option value="Faible">Faible</option>
             <option value="Moyenne">Moyenne</option>
             <option value="Élevée">Élevée</option>
-            <option value="Criticité">Criticité</option>
+            <option value="Critique">Critique</option>
         </select>
         </div>
-            
-        <select v-model="actifs.est_expose_internet">
-            <option :value="true">VRAI</option>
-            <option :value="false">FAUX</option>
-        </select>
 
         <div class="form-group">
-          <label for="entreprise">Service exposé sur Internet</label>
-          <select id="entreprise" v-model.number="actifs.entreprise_id">
-            <option value="">Sélectionnez un service</option>
+          <label for="expose">Exposé sur Internet</label>
+          <select id="expose" v-model="actifs.est_expose_internet">
+              <option :value="true">Oui</option>
+              <option :value="false">Non</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="entreprise">Entreprise concernée</label>
+          <select id="entreprise" v-model.number="actifs.entreprise_id" required>
+            <option disabled value="">-- Sélectionner une entreprise --</option>
 
             <option
             v-for="entreprise in entreprises"
@@ -79,9 +82,9 @@
             Ajouter
           </button>
 
-          <a href="/actifs" class="btn-secondary">
+          <router-link to="/actifs" class="btn-secondary">
             Retour
-          </a>
+          </router-link>
         </div>
       </form>
     </section>
@@ -89,6 +92,9 @@
 </template>
 
 <script>
+import { useActifStore } from '@/stores/actif'
+import { useEntrepriseStore } from '@/stores/entreprise'
+
 export default {
 
   data() {
@@ -105,51 +111,28 @@ export default {
   },
   methods: {
     async ajouterActif() {
+      const actifStore = useActifStore()
+
       try {
-        const response = await fetch(
-          'http://localhost:3006/api/assets',
-          {
-            method: 'POST',
-
-            headers: {
-              'Content-Type': 'application/json'
-            },
-
-            body: JSON.stringify(this.actifs)
-          }
-        );
-        const data = await response.json(); 
-        if (response.ok) {
-
-          alert('Entreprise ajoutée');
-
-        } else {
-            console.error(data);
-            alert(data.error);
-
-        }
+        await actifStore.ajouterActif(this.actifs)
+        alert('Actif ajouté');
+        this.$router.push('/actifs')
 
       } catch (error) {
-
         console.error(error);
-
-        alert('Erreur de connexion');
-
+        alert(error.message || 'Erreur de connexion');
       }
     },
 
     async loadCompanies() {
+        const entrepriseStore = useEntrepriseStore()
+
         try {
-            const response = await fetch('http://localhost:3006/api/companies')
-
-            if (!response.ok) {
-            throw new Error('Erreur lors du chargement des entreprises')
-            }
-
-            this.entreprises = await response.json()
+            await entrepriseStore.fetchEntreprises()
+            this.entreprises = entrepriseStore.entreprises
         } catch (err) {
-            this.error = err.message
-        } 
+            console.error(err)
+        }
     }
 
   },

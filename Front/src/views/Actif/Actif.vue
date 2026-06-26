@@ -1,19 +1,20 @@
 <template>
     <h1>Gestion des actifs :</h1>
-    <a href="/actifs/add" id="addActif">Ajouter un actif</a>
+    <router-link to="/actifs/add" id="addActif">Ajouter un actif</router-link>
     <section>
-        <div v-if="loading">Chargement...</div>
+        <div v-if="store.loading">Chargement...</div>
 
-        <div v-else-if="error">
-            {{ error }}
+        <div v-else-if="store.error">
+            {{ store.error }}
         </div>
-        <div class="block" v-else v-for="actif in actifs" :key="actif.actif_id">
+        <div class="block" v-else v-for="actif in store.actifs" :key="actif.actif_id">
             <h2>{{ actif.actif_nom }}</h2>
             <p> Criticité : {{ actif.criticite }}</p>
-            <p>Entreprise concernée : {{ actif.entreprise_id }}</p>
+            <p>Entreprise concernée : {{ nomEntreprise(actif.entreprise_id) }}</p>
             <p>Type : {{ actif.type }}</p>
+            <p>Exposé sur Internet : {{ actif.est_expose_internet ? 'Oui' : 'Non' }}</p>
             <div class="link">
-                <a>Modifier</a>
+                <router-link :to="`/actifs/${actif.actif_id}/edit`">Modifier</router-link>
                 <a @click="supprimerActifs(actif.actif_id)">Supprimer</a>
             </div>   
         </div>
@@ -21,64 +22,36 @@
 </template>
 
 <script setup>
-    import { ref, onMounted } from 'vue'
+import { onMounted } from 'vue'
+import { useActifStore } from '@/stores/actif'
+import { useEntrepriseStore } from '@/stores/entreprise'
 
-const actifs = ref([])
-const loading = ref(false)
-const error = ref('')
+const store = useActifStore()
+const entrepriseStore = useEntrepriseStore()
 
-const loadActifs = async () => {
-  loading.value = true
-
-  try {
-    const response = await fetch('http://localhost:3006/api/assets')
-
-    if (!response.ok) {
-      throw new Error('Erreur lors du chargement des actifs')
-    }
-
-    actifs.value = await response.json()
-  } catch (err) {
-    error.value = err.message
-  } finally {
-    loading.value = false
-  }
-
+const nomEntreprise = (entreprise_id) => {
+    const entreprise = entrepriseStore.entreprises.find(
+        (entreprise) => entreprise.entreprise_id === entreprise_id
+    )
+    return entreprise ? entreprise.entreprise_nom : entreprise_id
 }
 
 const supprimerActifs = async (id) => {
-     loading.value = true
   if (!confirm("Voulez-vous vraiment supprimer cet actif ?")) {
     return
   }
 
   try {
-    const response = await fetch(
-      `http://localhost:3006/api/assets/${id}`,
-      {
-        method: "DELETE",
-      }
-    )
-
-    if (!response.ok) {
-      throw new Error("Erreur lors de la suppression")
-    }
-
-    actifs.value = actifs.value.filter(
-      actif => actifs.actif_id !== id
-    )
-
+    await store.supprimerActif(id)
   } catch (err) {
     console.error(err)
-  }finally{
-     loading.value = false
+    alert(err.message)
   }
 }
 
-
-
 onMounted(() => {
-  loadActifs()
+  store.fetchActifs()
+  entrepriseStore.fetchEntreprises()
 })
 </script>
 
