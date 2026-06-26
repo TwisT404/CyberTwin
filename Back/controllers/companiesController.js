@@ -11,6 +11,20 @@ const getAllCompanies = (req, res) => {
   });
 };
 
+// GET /api/companies/:id
+const getCompanyById = (req, res) => {
+  const id = parseInt(req.params.id);
+  db.query('SELECT * FROM entreprises WHERE entreprise_id = ?', [id], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (!results.length) {
+      return res.status(404).json({ error: 'Entreprise introuvable' });
+    }
+    res.json(results[0]);
+  });
+};
+
 // POST /api/companies
 const createCompany = (req, res) => {
   const { entreprise_nom, secteur, employes, serveurs, postes_clients, services_exposes } = req.body;
@@ -31,12 +45,15 @@ const createCompany = (req, res) => {
 // PUT /api/companies/:id
 const updateCompany = (req, res) => {
   const id = parseInt(req.params.id);
-  const { name, sector, employees, servers, client_stations, exposed_services } = req.body;
-  db.query('UPDATE entreprises SET ? WHERE id = ?', [newCompany, id], (err, result) => {
+  const { entreprise_nom, secteur, employes, serveurs, postes_clients, services_exposes } = req.body;
+  const sql = 'UPDATE entreprises SET entreprise_nom = ?, secteur = ?, employes = ?, serveurs = ?, postes_clients = ?, services_exposes = ? WHERE entreprise_id = ?';
+  const params = [entreprise_nom, secteur, employes, serveurs, postes_clients, services_exposes, id];
+
+  db.query(sql, params, (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ id, ...newCompany });
+    res.json({ entreprise_id: id, entreprise_nom, secteur, employes, serveurs, postes_clients, services_exposes });
   });
 };
 
@@ -53,6 +70,7 @@ const deleteCompany = (req, res) => {
 
 module.exports = {
   getAllCompanies,
+  getCompanyById,
   createCompany,
   updateCompany,
   deleteCompany

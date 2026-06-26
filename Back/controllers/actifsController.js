@@ -11,6 +11,32 @@ const getAllActifs = (req, res) => {
   });
 };
 
+// GET /api/actifs/:id
+const getActifById = (req, res) => {
+  const id = parseInt(req.params.id);
+  db.query('SELECT * FROM actifs WHERE actif_id = ?', [id], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    if (!results.length) {
+      return res.status(404).json({ error: 'Actif introuvable' });
+    }
+    res.json(results[0]);
+  });
+};
+
+// GET /api/actifs/entreprise/:entreprise_id
+// Liste les actifs appartenant à une entreprise donnée
+const getActifsByEntreprise = (req, res) => {
+  const entreprise_id = parseInt(req.params.entreprise_id);
+  db.query('SELECT * FROM actifs WHERE entreprise_id = ?', [entreprise_id], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json(results);
+  });
+};
+
 // POST /api/actifs
 const createActif = (req, res) => {
   const { actif_nom, type, criticite, est_expose_internet, entreprise_id} = req.body;
@@ -27,12 +53,15 @@ const createActif = (req, res) => {
 // PUT /api/actifs/:id
 const updateActif = (req, res) => {
   const id = parseInt(req.params.id);
-  const { name, type, criticality, vulnerabilities, isExposedToInternet } = req.body;
-  db.query('UPDATE actifs SET ? WHERE id = ?', [req.body, id], (err, result) => {
+  const { actif_nom, type, criticite, est_expose_internet, entreprise_id } = req.body;
+  const sql = 'UPDATE actifs SET actif_nom = ?, type = ?, criticite = ?, est_expose_internet = ?, entreprise_id = ? WHERE actif_id = ?';
+  const params = [actif_nom, type, criticite, est_expose_internet, entreprise_id, id];
+
+  db.query(sql, params, (err, result) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
-    res.json({ id, ...req.body });
+    res.json({ actif_id: id, actif_nom, type, criticite, est_expose_internet, entreprise_id });
   });
 };
 
@@ -49,6 +78,8 @@ const deleteActif = (req, res) => {
 
 module.exports = {
   getAllActifs,
+  getActifById,
+  getActifsByEntreprise,
   createActif,
   updateActif,
   deleteActif
