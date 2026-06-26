@@ -1,0 +1,67 @@
+h1 {
+    text-align: center;
+    padding-bottom: 15px;
+}
+
+.select-entreprise {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+
+.select-entreprise select {
+    width: 250px;
+    height: 35px;
+    border-radius: 15px;
+    padding-left: 10px;
+}
+
+.rapport {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px 40px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.bloc {
+    border: 2px solid black;
+    border-radius: 15px;
+    padding: 20px;
+}
+
+.bloc h2 {
+    margin-bottom: 10px;
+}
+
+.bloc ul {
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.score {
+    font-size: 1.3rem;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.niveau-critique {
+    background-color: rgba(255, 0, 0, 0.2);
+}
+
+.niveau-eleve {
+    background-color: rgba(255, 165, 0, 0.25);
+}
+
+.niveau-moyen {
+    background-color: rgba(255, 255, 0, 0.25);
+}
+
+.niveau-faible {
+    background-color: rgba(0, 200, 0, 0.2);
+}
