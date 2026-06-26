@@ -5,10 +5,12 @@ import imageUrl from '@/assets/img/logo_cybertwin.png'
 <template>
     <header>
         <div>
-            <a href="/">Dashboard</a>
-            <a href="/entreprises">Entreprise</a>
-            <a href="/actifs">Actifs</a>
-            <a href="/vulnerabilites">Vulnérabilités</a>
+            <router-link to="/">Accueil</router-link>
+            <router-link to="/dashboard">Dashboard</router-link>
+            <router-link to="/entreprises">Entreprise</router-link>
+            <router-link to="/actifs">Actifs</router-link>
+            <router-link to="/vulnerabilites">Vulnérabilités</router-link>
+            <router-link to="/rapport">Rapport</router-link>
         </div>
         <div>
                 <img :src=imageUrl alt="Logo CyberTwin" style="width: 125px;height: auto;">
@@ -29,7 +31,7 @@ header{
 }
 
 header>div:first-child{
-    width: 50%;
+    width: 65%;
     height: 100%;
     display: flex;
     justify-content: space-around;
@@ -62,7 +64,7 @@ header>div:first-child a:hover{
 
 
 header>div:last-child{
-    width: 35%;
+    width: 25%;
     display: flex;
     justify-content: end;
     align-items: center;

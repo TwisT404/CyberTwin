@@ -6,12 +6,12 @@
 
       <label>
         <p>Nom de l'entreprise</p>
-        <input type="text" v-model="entreprise.name" required>
+        <input type="text" v-model="entreprise.entreprise_nom" required>
       </label>
 
       <label>
         <p>Secteur</p>
-        <input type="text" v-model="entreprise.entreprise_nom" required>
+        <input type="text" v-model="entreprise.secteur" required>
       </label>
 
       <label>
@@ -37,72 +37,41 @@
       <div>
         <button type="submit">Ajouter</button>
 
-        <a href="/entreprises">
+        <router-link to="/entreprises">
           Retour
-        </a>
+        </router-link>
       </div>
 
     </form>
   </section>
 </template>
 
-<script>
-export default {
+<script setup>
+import { reactive } from 'vue'
+import { useRouter } from 'vue-router'
+import { useEntrepriseStore } from '@/stores/entreprise'
 
-  data() {
-    return {
-      entreprise: {
-        entreprise_nom: '',
-        secteur: '',
-        employes: '',
-        serveurs: '',
-        postes_clients: '',
-        services_exposes: ''
-      }
-    }
-  },
+const router = useRouter()
+const store = useEntrepriseStore()
 
-  methods: {
+const entreprise = reactive({
+  entreprise_nom: '',
+  secteur: '',
+  employes: '',
+  serveurs: '',
+  postes_clients: '',
+  services_exposes: ''
+})
 
-    async ajouterEntreprise() {
-
-      try {
-
-        const response = await fetch(
-          'http://localhost:3006/api/companies',
-          {
-            method: 'POST',
-
-            headers: {
-              'Content-Type': 'application/json'
-            },
-
-            body: JSON.stringify(this.entreprise)
-          }
-        );
-
-        if (response.ok) {
-
-          alert('Entreprise ajoutée');
-
-        } else {
-
-          alert('Erreur lors de l\'ajout');
-
-        }
-
-      } catch (error) {
-
-        console.error(error);
-
-        alert('Erreur de connexion');
-
-      }
-
-    }
-
+const ajouterEntreprise = async () => {
+  try {
+    await store.ajouterEntreprise(entreprise)
+    alert('Entreprise ajoutée')
+    router.push('/entreprises')
+  } catch (error) {
+    console.error(error)
+    alert(error.message || 'Erreur de connexion')
   }
-
 }
 </script>
 

@@ -1,51 +1,81 @@
 <template>
-    <h1>Ajouter une vulnerabilite :</h1>
+    <h1>Associer une vulnérabilité :</h1>
 
     <section>
         <form @submit.prevent="ajouterVulnerabilite">
 
             <label>
-                <p>Nom de la vulnerabilite</p>
-                <input type="text" v-model="vulnerabilite.vul_nom" required>
+                <p>Actif concerné</p>
+                <select v-model.number="association.actif_id" required>
+                    <option disabled value="">-- Sélectionner un actif --</option>
+                    <option
+                        v-for="actif in actifs"
+                        :key="actif.actif_id"
+                        :value="actif.actif_id"
+                    >
+                        {{ actif.actif_nom }}
+                    </option>
+                </select>
             </label>
 
             <label>
-                <p>Description</p>
-                <input type="text" v-model="vulnerabilite.description" required>
+                <p>Vulnérabilité existante</p>
+                <select v-model.number="association.vulnerabilite_id">
+                    <option value="">-- Créer une nouvelle vulnérabilité --</option>
+                    <option
+                        v-for="vuln in vulnerabilitesExistantes"
+                        :key="vuln.vulnerabilite_id"
+                        :value="vuln.vulnerabilite_id"
+                    >
+                        {{ vuln.vulnerabilite_nom }}
+                    </option>
+                </select>
             </label>
 
-            <label>
-                <p>Gravité</p>
+            <template v-if="!association.vulnerabilite_id">
+                <label>
+                    <p>Nom de la vulnerabilite</p>
+                    <input type="text" v-model="vulnerabilite.vulnerabilite_nom" required>
+                </label>
 
-                <div class="radio-group">
-                    <label class="radio-item">
-                        <input type="radio" v-model="vulnerabilite.gravite" value="faible" required>
-                        Faible
-                    </label>
+                <label>
+                    <p>Description</p>
+                    <input type="text" v-model="vulnerabilite.description" required>
+                </label>
 
-                    <label class="radio-item">
-                        <input type="radio" v-model="vulnerabilite.gravite" value="moyenne" required>
-                        Moyenne
-                    </label>
+                <label>
+                    <p>Gravité</p>
 
-                    <label class="radio-item">
-                        <input type="radio" v-model="vulnerabilite.gravite" value="élevée" required>
-                        Élevée
-                    </label>
+                    <div class="radio-group">
+                        <label class="radio-item">
+                            <input type="radio" v-model="vulnerabilite.gravite" value="Faible" required>
+                            Faible
+                        </label>
 
-                    <label class="radio-item">
-                        <input type="radio" v-model="vulnerabilite.gravite" value="critique" required>
-                        Critique
-                    </label>
-                </div>
-            </label>
+                        <label class="radio-item">
+                            <input type="radio" v-model="vulnerabilite.gravite" value="Moyenne" required>
+                            Moyenne
+                        </label>
+
+                        <label class="radio-item">
+                            <input type="radio" v-model="vulnerabilite.gravite" value="Élevée" required>
+                            Élevée
+                        </label>
+
+                        <label class="radio-item">
+                            <input type="radio" v-model="vulnerabilite.gravite" value="Critique" required>
+                            Critique
+                        </label>
+                    </div>
+                </label>
+            </template>
 
             <div>
                 <button type="submit">Ajouter</button>
 
-                <a href="/vulnerabilites">
+                <router-link to="/vulnerabilites">
                     Retour
-                </a>
+                </router-link>
             </div>
 
         </form>
@@ -53,63 +83,98 @@
 </template>
 
 <script>
+import { useVulnerabiliteStore } from '@/stores/vulnerabilite'
+import { useActifStore } from '@/stores/actif'
+
 export default {
 
     data() {
         return {
             vulnerabilite: {
-                vul_nom: '',
+                vulnerabilite_nom: '',
                 description: '',
                 gravite: ''
-            }
+            },
+            association: {
+                actif_id: '',
+                vulnerabilite_id: ''
+            },
+            actifs: [],
+            vulnerabilitesExistantes: []
         }
     },
 
-
     methods: {
 
-        async ajouterVulnerabilite() {
+        async chargerActifs() {
+            const actifStore = useActifStore()
 
             try {
+                await actifStore.fetchActifs()
+                this.actifs = actifStore.actifs
+            } catch (err) {
+                console.error(err)
+            }
+        },
 
-                const response = await fetch(
-                    'http://localhost:3006/api/vulnerabilites',
-                    {
-                        method: 'POST',
+        async chargerVulnerabilites() {
+            const vulnerabiliteStore = useVulnerabiliteStore()
 
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
+            try {
+                await vulnerabiliteStore.fetchVulnerabilites()
+                this.vulnerabilitesExistantes = vulnerabiliteStore.vulnerabilites
+            } catch (err) {
+                console.error(err)
+            }
+        },
 
-                        body: JSON.stringify(this.vulnerabilite)
-                    }
-                );
+        async ajouterVulnerabilite() {
+            const vulnerabiliteStore = useVulnerabiliteStore()
+            const actifChoisi = this.actifs.find(a => a.actif_id === this.association.actif_id)
 
-                if (response.ok) {
+            if (!actifChoisi) {
+                alert('Veuillez sélectionner un actif')
+                return
+            }
 
-                    alert('Vulnerabilite ajoutée');
+            try {
+                let vulnerabiliteId = this.association.vulnerabilite_id
 
-                } else {
-
-                    alert('Erreur lors de l\'ajout');
-
+                // Si aucune vulnérabilité existante n'est sélectionnée, on en crée une nouvelle
+                if (!vulnerabiliteId) {
+                    const nouvelleVulnerabilite = await vulnerabiliteStore.ajouterVulnerabilite(this.vulnerabilite)
+                    vulnerabiliteId = nouvelleVulnerabilite.id
                 }
+
+                await vulnerabiliteStore.associerVulnerabilite(
+                    actifChoisi.actif_id,
+                    vulnerabiliteId,
+                    actifChoisi.entreprise_id
+                )
+
+                alert('Vulnérabilité associée')
+                this.$router.push('/vulnerabilites')
 
             } catch (error) {
 
                 console.error(error);
 
-                alert('Erreur de connexion');
+                alert(error.message || 'Erreur de connexion');
 
             }
 
         }
 
+    },
+
+    mounted() {
+        this.chargerActifs()
+        this.chargerVulnerabilites()
     }
 
 }
 </script>
 
 <style scoped>
-@import url('./src/assets/css/Vulnerabilite/AjoutVulnerabilite.css');
+@import url('./../../assets/css/Vulnerabilite/AjoutVulnerabilite.css');
 </style>
